@@ -5,7 +5,7 @@ export default function SplashScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Lecodearn</Text>
       <Image
-        source={require("../assets/splash-art.png")}
+        source={require("../../assets/splash-art.png")}
         style={styles.image}
       />
       <Text style={styles.subtitle}>Just code</Text>

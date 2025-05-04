@@ -24,7 +24,7 @@ export default function Index() {
     return (
       <View style={styles.container}>
         <Image
-          source={require('../assets/splash-art.png')}
+          source={require('../../assets/splash-art.png')}
           style={styles.image}
         />
         <Text style={styles.title}>Lecodearn</Text>
