@@ -29,11 +29,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        return (
     <ThemeProvider value={DefaultTheme}>
       <Slot /> {/* o <Stack /> si defines las rutas directamente aquí */}
     </ThemeProvider>
-  );
     </ThemeProvider>
   );
 }
