@@ -9,13 +9,13 @@ export default function Index() {
     const timer = setTimeout(() => {
       setShowSplash(false);
 
-      const isAuthenticated = false; // Cambia a true si quieres ir directo a tabs
+      const isAuthenticated = true ; // Cambia a true si quieres ir directo a tabs
       if (isAuthenticated) {
         router.replace('/(tabs)');
       } else {
         router.replace('/login');
       }
-    }, 4000); // 4 segundos para la splash
+    }, 2000); // 4 segundos para la splash
 
     return () => clearTimeout(timer);
   }, []);
