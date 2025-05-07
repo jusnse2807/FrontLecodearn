@@ -1,6 +1,8 @@
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useState } from "react";
 import { Link } from "expo-router";
+import { Router } from "expo-router";
+
 
 export default function CrearCurso(){
 
@@ -8,8 +10,6 @@ export default function CrearCurso(){
     const [image, setImage] = useState(''); 
 
     const handleSubmit = async () =>{
-
-        console.log("Enter de method ")
 
         if (!nombre.trim() || !image.trim()) {
             alert("Por favor complete todos los campos antes de continuar.");
@@ -21,7 +21,7 @@ export default function CrearCurso(){
 
         try{
 
-            console.log("2")
+           
             const response = await fetch(url, {
                 method: "POST", 
                 headers: {
@@ -30,7 +30,7 @@ export default function CrearCurso(){
                 body: JSON.stringify({nombre, image})
             });
 
-            console.log("something")
+            
 
             if (response.ok){
 
@@ -47,6 +47,8 @@ export default function CrearCurso(){
         } catch(error){
            console.log(error); 
         }
+
+        
     };
 
     return (
@@ -75,10 +77,16 @@ export default function CrearCurso(){
          <Text>{nombre}</Text>
         </View>
 
+     <View style ={styles.finalSeccion}>
         <Text style = {styles.title2}> Comienza a añadir modulos</Text>
-        <Pressable onPress={handleSubmit} style={styles.button}>
+        <Link href={"/administrador/CrearModulo"}>
+        <Pressable style={styles.button}>
            <Text style ={styles.textButton2}>Agregar modulo</Text>
          </Pressable>
+         </Link>
+         </View>
+
+
         </ScrollView>
         </SafeAreaView>
     );
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
      marginTop:40,
      borderColor: '#483d8b',
      alignItems:'center',
-     maxWidth:'80%'
+     maxWidth:'90%'
 
     },
 
@@ -129,7 +137,8 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 20,
         marginTop:20,
-        flex:1
+        flex:1,
+        alignItems:'center'
     },
 
     text:{
@@ -137,7 +146,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#696969',
         marginBottom: 20,
-        marginTop:20
+        marginTop:40
     
     },
 
@@ -162,6 +171,11 @@ const styles = StyleSheet.create({
         padding: 15,
         fontSize: 16,
         backgroundColor: '#f9f9f9',
+        width: '90%'
       },
+
+      finalSeccion:{
+        alignItems:'center'
+      }
 })
 
