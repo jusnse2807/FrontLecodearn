@@ -7,8 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { router, useRouter } from 'expo-router';
 
 interface User {
   id: string;
@@ -19,13 +21,16 @@ interface User {
 const API_URL = 'https://lecodearnback.onrender.com/usuario';
 
 const UserManager: React.FC = () => {
-  const navigation = useNavigation();
+  const router = useRouter();  // Usa el hook useRouter para acceder a la navegación
   const [users, setUsers] = useState<User[]>([]);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<{ nombre: string; email: string }>({
     nombre: '',
     email: '',
   });
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(API_URL)
@@ -70,6 +75,11 @@ const UserManager: React.FC = () => {
       .catch((err) => console.error(err));
   };
 
+  const handleDeleteConfirmation = (id: string) => {
+    setUserToDelete(id);
+    setIsModalVisible(true);
+  };
+
   const handleDelete = (id: string) => {
     fetch(`${API_URL}/${id}`, {
       method: 'DELETE',
@@ -84,7 +94,7 @@ const UserManager: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Pressable onPress={() => navigation.navigate('AdminOptions')} style={styles.backButton}>
+        <Pressable onPress={() => router.push('/administrador/AdminOptions')} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Volver</Text>
         </Pressable>
 
@@ -130,7 +140,7 @@ const UserManager: React.FC = () => {
                       <Text style={styles.textButtonSmall}>Editar</Text>
                     </Pressable>
                     <Pressable
-                      onPress={() => handleDelete(user.id)}
+                      onPress={() => handleDeleteConfirmation(user.id)}
                       style={[styles.buttonSmall, { backgroundColor: '#dc143c' }]}
                     >
                       <Text style={styles.textButtonSmall}>Eliminar</Text>
@@ -141,13 +151,43 @@ const UserManager: React.FC = () => {
             </View>
           ))}
         </View>
+
+        {/* Modal de confirmación para eliminar */}
+        <Modal
+          visible={isModalVisible}
+          animationType="fade"
+          transparent={true}
+          onRequestClose={() => setIsModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>¿Estás seguro de que deseas eliminar este usuario?</Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  onPress={() => setIsModalVisible(false)}
+                  style={styles.modalButtonCancel}
+                >
+                  <Text style={styles.modalButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (userToDelete) {
+                      handleDelete(userToDelete);
+                    }
+                    setIsModalVisible(false);
+                  }}
+                  style={styles.modalButtonDelete}
+                >
+                  <Text style={styles.modalButtonText}>Eliminar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-export default UserManager;
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
@@ -230,4 +270,44 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
   },
+
+  // Estilos del Modal
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButtonCancel: {
+    backgroundColor: '#ccc',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonDelete: {
+    backgroundColor: '#dc143c',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
+
+export default UserManager;
