@@ -8,7 +8,7 @@ const opciones: Opcion[] = [
     {id: '2', name: 'Modificar usuarios', reference: 'ModificarUsuario'},
     {id: '3', name: 'ver cursos', reference: 'CrearCurso'},
     {id: '4', name: 'crear cursos', reference: 'CrearCurso'},
-    {id: '5', name: 'Registors y pagos', reference: 'CrearCurso'},
+    {id: '5', name: 'Registros y pagos', reference: 'CrearCurso'},
     {id: '6', name: 'chatbot', reference: 'CrearCurso'},
     {id: '7', name: 'Agregar modulo, seccion o quiz', reference: 'CrearCurso'},
 ];
