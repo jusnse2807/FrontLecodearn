@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 type Opcion = {id: string; name: string, reference: string};
 const opciones: Opcion[] = [
     {id: '1', name: 'Monitorear usuarios', reference: 'CrearCurso'},
-    {id: '2', name: 'Modificar usuarios', reference: 'CrearCurso'},
+    {id: '2', name: 'Modificar usuarios', reference: 'ModificarUsuario'},
     {id: '3', name: 'ver cursos', reference: 'CrearCurso'},
     {id: '4', name: 'crear cursos', reference: 'CrearCurso'},
     {id: '5', name: 'Registors y pagos', reference: 'CrearCurso'},
