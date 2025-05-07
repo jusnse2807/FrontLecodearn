@@ -6,8 +6,8 @@ type Opcion = {id: string; name: string, reference: string};
 const opciones: Opcion[] = [
     {id: '1', name: 'Monitorear usuarios', reference: 'CrearCurso'},
     {id: '2', name: 'Modificar usuarios', reference: 'CrearCurso'},
-    {id: '3', name: 'ver cursos', reference: 'CrearCurso'},
-    {id: '4', name: 'crear cursos', reference: 'CrearCurso'},
+    {id: '3', name: 'ver cursos', reference: 'Courses'},
+    {id: '4', name: 'crear cursos', reference: '/CrearCurso'},
     {id: '5', name: 'Registros y pagos', reference: 'CrearCurso'},
     {id: '6', name: 'chatbot', reference: 'CrearCurso'},
     {id: '7', name: 'Agregar modulo, seccion o quiz', reference: 'CrearCurso'},
