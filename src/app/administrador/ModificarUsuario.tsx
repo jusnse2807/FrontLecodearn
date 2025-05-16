@@ -21,7 +21,7 @@ interface User {
 const API_URL = 'https://lecodearnback.onrender.com/usuario';
 
 const UserManager: React.FC = () => {
-  const router = useRouter();  // Usa el hook useRouter para acceder a la navegación
+  const router = useRouter();  
   const [users, setUsers] = useState<User[]>([]);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<{ nombre: string; email: string }>({
@@ -94,7 +94,7 @@ const UserManager: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Pressable onPress={() => router.push('/administrador/AdminOptions')} style={styles.backButton}>
+<Pressable onPress={() => router.back()} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Volver</Text>
         </Pressable>
 

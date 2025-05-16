@@ -4,13 +4,13 @@ import { StyleSheet, View } from "react-native";
 import { Link } from "expo-router";
 type Opcion = {id: string; name: string, reference: string};
 const opciones: Opcion[] = [
-    {id: '1', name: 'Monitorear usuarios', reference: 'CrearCurso'},
-    {id: '2', name: 'Modificar usuarios', reference: 'CrearCurso'},
-    {id: '3', name: 'ver cursos', reference: 'Courses'},
-    {id: '4', name: 'crear cursos', reference: 'CrearCurso'},
+    {id: '1', name: 'Crear secciones', reference: 'CrearSeccion'},
+    {id: '2', name: 'Modificar usuarios', reference: 'ModificarUsuario'},
+    {id: '3', name: 'Ver cursos', reference: 'Courses'},
+    {id: '4', name: 'Crear cursos', reference: 'CrearCurso'},
     {id: '5', name: 'Registros y pagos', reference: 'CrearCurso'},
-    {id: '6', name: 'chatbot', reference: 'CrearCurso'},
-    {id: '7', name: 'Agregar modulo, seccion o quiz', reference: 'CrearCurso'},
+    {id: '6', name: 'Chatbot', reference: 'CrearCurso'},
+    {id: '7', name: 'Crear modulo', reference: 'CrearModulo'},
 ];
 
 export default function AdminOptions(){

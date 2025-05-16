@@ -1,7 +1,8 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, FlatList } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,6 +17,9 @@ const courses = [
 export default function CoursesScreen() {
   return (
     <View style={styles.container}>
+<Pressable onPress={() => router.back()} style={styles.backButton}>
+                <Text style={styles.backButtonText}>← Volver</Text>
+              </Pressable>
       {/* Fondo SVG */}
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
         <Path
@@ -52,6 +56,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ede7f3',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+    backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: '#eee',
+    borderRadius: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#4169e1',
+    fontWeight: '600',
   },
   content: {
     alignItems: 'center',
