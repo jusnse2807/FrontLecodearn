@@ -9,8 +9,34 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    router.push('/administrador/AdminOptions');
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('Por favor ingresa correo y contraseña');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://lecodearnback.onrender.com/administradores/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        alert(error.message || 'Error al iniciar sesión');
+        return;
+      }
+
+      const data = await response.json();
+      console.log('Login exitoso:', data);
+      router.push('/administrador/AdminOptions');
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('No se pudo conectar al servidor');
+    }
   };
 
   return (
@@ -21,7 +47,7 @@ export default function LoginScreen() {
           fill="#6C63FF"
         />
         <Path
-          d={`M 0 ${height * 0.85} C ${width * 0.95} ${height*0.7}, ${width * 0.9} ${height *0.25}, ${width*1.5} ${height} L 0 ${height} Z`}
+          d={`M 0 ${height * 0.85} C ${width * 0.95} ${height * 0.7}, ${width * 0.9} ${height * 0.25}, ${width * 1.5} ${height} L 0 ${height} Z`}
           fill="#A393F2"
         />
       </Svg>
