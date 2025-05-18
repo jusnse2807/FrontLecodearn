@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -6,20 +6,54 @@ import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
-const courses = [
-  { name: 'Python', modules: 4, icon: <FontAwesome5 name="python" size={24} color="#6C63FF" /> },
-  { name: 'Java', modules: 5, icon: <MaterialCommunityIcons name="language-java" size={24} color="#6C63FF" /> },
-  { name: 'HTML', modules: 5, icon: <MaterialCommunityIcons name="language-html5" size={24} color="#6C63FF" /> },
-  { name: 'Javascript', modules: 5, icon: <MaterialCommunityIcons name="language-javascript" size={24} color="#6C63FF" /> },
-  { name: 'C#', modules: 4, icon: <MaterialCommunityIcons name="language-csharp" size={24} color="#6C63FF" /> },
-];
+// Interfaz del curso según el backend
+interface Curso {
+  id: string;
+  nombre: string;
+  image: string;
+  modulos: any[];
+}
 
 export default function CoursesScreen() {
+  const [courses, setCourses] = useState<Curso[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('https://lecodearnback.onrender.com/curso');
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const getIconForCourse = (name: string) => {
+    switch (name.toLowerCase()) {
+      case 'python':
+        return <FontAwesome5 name="python" size={24} color="#6C63FF" />;
+      case 'java':
+        return <MaterialCommunityIcons name="language-java" size={24} color="#6C63FF" />;
+      case 'html':
+        return <MaterialCommunityIcons name="language-html5" size={24} color="#6C63FF" />;
+      case 'javascript':
+        return <MaterialCommunityIcons name="language-javascript" size={24} color="#6C63FF" />;
+      case 'c#':
+        return <MaterialCommunityIcons name="language-csharp" size={24} color="#6C63FF" />;
+      default:
+        return <MaterialCommunityIcons name="book" size={24} color="#6C63FF" />;
+    }
+  };
+
   return (
     <View style={styles.container}>
-<Pressable onPress={() => router.back()} style={styles.backButton}>
-                <Text style={styles.backButtonText}>← Volver</Text>
-              </Pressable>
+      <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Text style={styles.backButtonText}>← Volver</Text>
+      </Pressable>
+
       {/* Fondo SVG */}
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
         <Path
@@ -33,14 +67,16 @@ export default function CoursesScreen() {
       </Svg>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Courses</Text>
+        <Text style={styles.title}>Cursos</Text>
         <FlatList
           data={courses}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.courseItem}>
-              <View style={styles.iconContainer}>{item.icon}</View>
-              <Text style={styles.courseText}>{item.name} ({item.modules} modules)</Text>
+              <View style={styles.iconContainer}>{getIconForCourse(item.nombre)}</View>
+              <Text style={styles.courseText}>
+                {item.nombre} ({item.modulos.length} módulos)
+              </Text>
             </View>
           )}
           contentContainerStyle={styles.courseList}
@@ -57,13 +93,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-    backButton: {
+  backButton: {
     alignSelf: 'flex-start',
     marginBottom: 10,
     paddingVertical: 6,
     paddingHorizontal: 12,
     backgroundColor: '#eee',
     borderRadius: 10,
+    marginTop: 50,
+    marginLeft: 10,
   },
   backButtonText: {
     fontSize: 16,
@@ -85,7 +123,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   courseItem: {
-    backgroundColor: '#cfc9ef', 
+    backgroundColor: '#cfc9ef',
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
