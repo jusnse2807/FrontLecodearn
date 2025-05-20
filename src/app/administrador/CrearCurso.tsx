@@ -54,21 +54,27 @@ export default function CrearCurso(){
     return (
         <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style = {styles.container}>
-            <Text style = {styles.title}>Crear curso !</Text>
+            <Text style = {styles.title}>Crear curso ! 💻 🎓</Text>
 
         <View style = {styles.foro}>
+
+            <View style={styles.seccionado}>
             <Text style ={styles.text}>Ingrese el nombre del Curso</Text>
             <TextInput 
             style= {styles.input}
             value = {nombre}
             onChangeText={setNombre}
             />
+            </View>
+            
+            <View style={styles.seccionado}>
             <Text style ={styles.text}>Ingrese la imagen pricipal para el curso en formato de url</Text>
             <TextInput 
             style= {styles.input}
             value = {image}
             onChangeText={setImage}
             />
+            </View>
            
             <Pressable onPress={handleSubmit} style={styles.button}>
            <Text style ={styles.textButton}>Crear curso</Text>
@@ -103,14 +109,33 @@ const styles = StyleSheet.create({
         flex:1,  
     },
 
+    seccionado:{
+        backgroundColor: '#f0f8ff',
+        borderRadius: 20,
+        flex:1,
+        alignItems: 'center',
+        width:'90%',
+        padding:20,
+        marginTop:10,
+        marginBottom:20,
+        // iOS shadow
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+
+      // Android shadow
+      elevation: 6,
+        },
+
     button:{
      backgroundColor: '#4169e1',
      padding: 20,
      borderRadius: 60,
-     marginTop:40,
+     marginTop:20,
      borderColor: '#483d8b',
      alignItems:'center',
-     maxWidth:'90%'
+     maxWidth:'100%'
 
     },
 
@@ -133,7 +158,7 @@ const styles = StyleSheet.create({
 
 
     foro:{
-        backgroundColor: '#f0f8ff',
+        backgroundColor: '#b0c4de',
         padding: 20,
         borderRadius: 20,
         marginTop:20,
@@ -146,12 +171,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#696969',
         marginBottom: 20,
-        marginTop:40
+
     
     },
 
     textButton:{
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: '700',
         color: 'white',
     

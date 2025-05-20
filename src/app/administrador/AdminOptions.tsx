@@ -5,11 +5,11 @@ import { Link } from "expo-router";
 type Opcion = {id: string; name: string, reference: string};
 const opciones: Opcion[] = [
     {id: '1', name: 'Monitorear usuarios', reference: 'CrearCurso'},
-    {id: '2', name: 'Modificar usuarios', reference: 'CrearCurso'},
+    {id: '2', name: 'Modificar usuarios', reference: 'ModificarUsuario'},
     {id: '3', name: 'ver cursos', reference: 'Courses'},
     {id: '4', name: 'crear cursos', reference: 'CrearCurso'},
-    {id: '5', name: 'Registros y pagos', reference: 'CrearCurso'},
-    {id: '6', name: 'chatbot', reference: 'CrearCurso'},
+    {id: '5', name: 'Registros y pagos', reference: ''},
+    {id: '6', name: 'chatbot', reference: ''},
     {id: '7', name: 'Agregar modulo, seccion o quiz', reference: 'CrearCurso'},
 ];
 
@@ -63,7 +63,15 @@ const Styles = StyleSheet.create({
         borderRadius: 20,
         flex:1,
         alignItems: 'center',
-        maxWidth:'50%' 
+        maxWidth:'50%',
+        // iOS shadow
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+
+      // Android shadow
+      elevation: 6,
         },
 
     fondoTitulo:{

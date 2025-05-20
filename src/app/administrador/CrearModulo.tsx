@@ -121,10 +121,11 @@ export default function CrearModulo(){
     return (
         <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style = {styles.container}>
-            <Text style = {styles.title}>Crear un modulo !</Text>
+            <Text style = {styles.title}>Crear un modulo ! 💡 📝</Text>
 
         <View style = {styles.foro}>
 
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el curso al que va a añadir el modulo</Text>
             <Picker
             selectedValue={cursoId}
@@ -146,6 +147,7 @@ export default function CrearModulo(){
                 ))}
 
             </Picker>
+            </View>
 
              <View style ={styles.renderedView}>
             <Text style ={styles.tituloLista} >Ver modulos existentes en este curso</Text>
@@ -161,18 +163,23 @@ export default function CrearModulo(){
             </FlatList>
             </View>
 
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el titulo del modulo</Text>
             <TextInput 
             style= {styles.input}
             value = {titulo}
             onChangeText={setTitulo}
             />
+            </View>
+
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el numero del modulo</Text>
             <TextInput 
             style= {styles.input}
             value = {numero}
             onChangeText={setNumero}
             />
+            </View>
            
             <Pressable onPress={handleSubmit} style={styles.button}>
            <Text style ={styles.textButton}>Crear modulo</Text>
@@ -204,6 +211,24 @@ const styles = StyleSheet.create({
         marginTop:60,
         flex:1,  
     },
+    seccionado:{
+        backgroundColor: '#f0f8ff',
+        borderRadius: 20,
+        flex:1,
+        alignItems: 'center',
+        width:'90%',
+        padding:28,
+        marginTop:10,
+        marginBottom:20,
+        // iOS shadow
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+
+      // Android shadow
+      elevation: 6,
+        },
 
     button:{
      backgroundColor: '#4169e1',
@@ -247,7 +272,7 @@ const styles = StyleSheet.create({
 
 
     foro:{
-        backgroundColor: '#f0f8ff',
+        backgroundColor: '#b0c4de',
         padding: 20,
         borderRadius: 20,
         marginTop:20,
@@ -260,7 +285,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#696969',
         marginBottom: 20,
-        marginTop:40
     
     },
 
@@ -273,7 +297,7 @@ const styles = StyleSheet.create({
     },
 
     textButton:{
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: '700',
         color: 'white',
     
@@ -307,6 +331,7 @@ const styles = StyleSheet.create({
         padding:15,
         borderRadius:20,
         marginTop:20,
+        marginBottom:20
       },
 
       finalSeccion:{

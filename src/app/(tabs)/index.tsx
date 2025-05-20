@@ -4,7 +4,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Lecodearn!</Text>
-      <Text style={styles.subtitle}>Select a module to start learning 🎯</Text>
+      <Text style={styles.subtitle}>Select a course to start learning 🎯</Text>
     </View>
   );
 }

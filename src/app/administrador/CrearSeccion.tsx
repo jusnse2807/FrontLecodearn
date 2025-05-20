@@ -150,10 +150,11 @@ export default function CrearModulo(){
     return (
         <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style = {styles.container}>
-            <Text style = {styles.title}>Crear una seccion !</Text>
+            <Text style = {styles.title}>Crear una seccion ! 📑 👩🏻‍💻</Text>
 
         <View style = {styles.foro}>
 
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el curso al que va a añadir la seccion</Text>
             <Picker
             selectedValue={cursoId}
@@ -172,7 +173,9 @@ export default function CrearModulo(){
                 ))}
 
             </Picker>
+            </View>
 
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el modulo al que va a añadir la seccion</Text>
             <Picker
             selectedValue={moduloId}
@@ -192,6 +195,7 @@ export default function CrearModulo(){
                 ))}
 
             </Picker>
+            </View>
 
              <View style ={styles.renderedView}>
             <Text style ={styles.tituloLista} >Ver secciones existentes en este curso</Text>
@@ -207,19 +211,25 @@ export default function CrearModulo(){
             </FlatList>
             </View>
 
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el titulo de la seccion</Text>
             <TextInput 
             style= {styles.input}
             value = {titulo}
             onChangeText={setTitulo}
             />
+            </View>
+
+            <View style = {styles.seccionado}>
             <Text style ={styles.text}>Ingrese el numero de la seccion</Text>
             <TextInput 
             style= {styles.input}
             value = {numero}
             onChangeText={setNumero}
             />
+            </View>
 
+             <View style = {styles.seccionado}>
              <Text style ={styles.text}>Ingrese la teoria para esta seccion</Text>
             <TextInput 
             multiline
@@ -231,7 +241,9 @@ export default function CrearModulo(){
             value = {teoria}
             onChangeText={setTeoria}
             />
+            </View>
 
+            <View style = {styles.seccionado}>
              <Text style ={styles.text}>Ingrese el ejemplo para esta seccion</Text>
             <TextInput 
             multiline
@@ -243,6 +255,7 @@ export default function CrearModulo(){
             value = {ejemplo}
             onChangeText={setEjemplo}
             />
+            </View>
            
             <Pressable onPress={handleSubmit} style={styles.button}>
            <Text style ={styles.textButton}>Crear Seccion</Text>
@@ -277,20 +290,38 @@ const styles = StyleSheet.create({
      backgroundColor: '#4169e1',
      padding: 20,
      borderRadius: 60,
-     marginTop:40,
+     marginTop:10,
      borderColor: '#483d8b',
      alignItems:'center',
      maxWidth:'80%'
 
     },
 
+    seccionado:{
+        backgroundColor: '#f0f8ff',
+        borderRadius: 20,
+        flex:1,
+        alignItems: 'center',
+        width:'90%',
+        padding:10,
+        marginTop:10,
+        marginBottom:20,
+        // iOS shadow
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+
+      // Android shadow
+      elevation: 6,
+        },
+
     pickerContainer: {
         borderWidth: 1,
         borderColor: '#6495ed',
         borderRadius: 30,
         overflow: 'hidden',
-        backgroundColor: '#f9f9f9',
-        marginBottom: 20,
+        backgroundColor: '#f9f9f9'
       },
       
       picker: {
@@ -315,7 +346,7 @@ const styles = StyleSheet.create({
 
 
     foro:{
-        backgroundColor: '#f0f8ff',
+        backgroundColor: '#b0c4de',
         padding: 20,
         borderRadius: 20,
         marginTop:20,
@@ -328,7 +359,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#696969',
         marginBottom: 20,
-        marginTop:40
+        marginTop:10
     
     },
 
@@ -366,11 +397,12 @@ const styles = StyleSheet.create({
         padding:15,
         borderRadius:20,
         marginTop:20,
+        marginBottom:20
       },
       tituloLista: {
         fontSize: 20,
         fontWeight: '600',
-        color: '#4169e1',
+        color: '#696969',
         marginBottom: 20
 
     },
