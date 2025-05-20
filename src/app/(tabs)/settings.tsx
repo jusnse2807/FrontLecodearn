@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
-
+  const API_URL = 'https://lecodearnback.onrender.com/usuario';
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
 

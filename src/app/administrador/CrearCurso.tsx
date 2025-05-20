@@ -1,206 +1,319 @@
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from "react-native";
 import { useState } from "react";
-import { Link } from "expo-router";
-import { Router } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 
+export default function CrearCurso() {
+  const [nombre, setNombre] = useState('');
+  const [image, setImage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({ nombre: '', image: '' });
 
-export default function CrearCurso(){
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = { nombre: '', image: '' };
 
-    const [nombre, setNombre] = useState('');
-    const [image, setImage] = useState(''); 
+    if (!nombre.trim()) {
+      newErrors.nombre = 'El nombre del curso es obligatorio';
+      valid = false;
+    }
+    if (!image.trim()) {
+      newErrors.image = 'La URL de la imagen es obligatoria';
+      valid = false;
+    } else if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i.test(image)) {
+      newErrors.image = 'Por favor, ingrese una URL de imagen válida';
+      valid = false;
+    }
 
-    const handleSubmit = async () =>{
+    setErrors(newErrors);
+    return valid;
+  };
 
-        if (!nombre.trim() || !image.trim()) {
-            alert("Por favor complete todos los campos antes de continuar.");
-            return;
-          }
-          
-        const url = "https://lecodearnback.onrender.com/curso"; 
-        console.log("something")
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      return;
+    }
 
-        try{
+    setIsSubmitting(true);
+    const url = "https://lecodearnback.onrender.com/curso";
 
-           
-            const response = await fetch(url, {
-                method: "POST", 
-                headers: {
-                  "Content-Type":"application/json"  
-                },
-                body: JSON.stringify({nombre, image})
-            });
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre, image }),
+      });
 
-            
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        alert("Curso creado correctamente");
+        setNombre('');
+        setImage('');
+        setErrors({ nombre: '', image: '' });
+      } else {
+        const errorData = await response.json();
+        console.log(errorData);
+        alert("El curso no pudo ser agregado");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error al conectar con el servidor");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-            if (response.ok){
-
-                response.json().then((data)=>{
-                    console.log(data)
-                    alert("Curso creado correctamente")
-                })
-            } else{
-                alert("El curso no pudo ser agregado")
-                const errorData = await response.json();
-                console.log(errorData); 
-            }
-
-        } catch(error){
-           console.log(error); 
-        }
-
+  return (
+    <SafeAreaView style={styles.safeArea}>
+                        <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Text style={styles.backButtonText}>← Volver</Text>
+        </Pressable>
+      <ScrollView 
+      
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         
-    };
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <FontAwesome name="graduation-cap" size={40} color="#3b82f6" style={styles.headerIcon} />
+            <Text style={styles.title}>Crear Curso</Text>
+            <Text style={styles.subtitle}>Complete los datos para crear un nuevo curso</Text>
+          </View>
 
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView style = {styles.container}>
-            <Text style = {styles.title}>Crear curso ! 💻 🎓</Text>
-
-        <View style = {styles.foro}>
-
-            <View style={styles.seccionado}>
-            <Text style ={styles.text}>Ingrese el nombre del Curso</Text>
-            <TextInput 
-            style= {styles.input}
-            value = {nombre}
-            onChangeText={setNombre}
-            />
+          <View style={styles.formContainer}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nombre del Curso</Text>
+              <View style={[
+                styles.inputWrapper,
+                errors.nombre ? styles.inputWrapperError : null,
+                nombre ? styles.inputWrapperActive : null
+              ]}>
+                <FontAwesome name="book" size={18} color="#6366f1" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  value={nombre}
+                  onChangeText={setNombre}
+                  placeholder="Ej: Introducción a React"
+                  placeholderTextColor="#94a3b8"
+                  accessibilityLabel="Nombre del curso"
+                />
+              </View>
+              {errors.nombre ? (
+                <View style={styles.errorContainer}>
+                  <FontAwesome name="exclamation-circle" size={14} color="#ef4444" />
+                  <Text style={styles.errorText}>{errors.nombre}</Text>
+                </View>
+              ) : null}
             </View>
-            
-            <View style={styles.seccionado}>
-            <Text style ={styles.text}>Ingrese la imagen pricipal para el curso en formato de url</Text>
-            <TextInput 
-            style= {styles.input}
-            value = {image}
-            onChangeText={setImage}
-            />
-            </View>
-           
-            <Pressable onPress={handleSubmit} style={styles.button}>
-           <Text style ={styles.textButton}>Crear curso</Text>
-         </Pressable>
 
-         <Text>{nombre}</Text>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>URL de la Imagen Principal</Text>
+              <View style={[
+                styles.inputWrapper,
+                errors.image ? styles.inputWrapperError : null,
+                image ? styles.inputWrapperActive : null
+              ]}>
+                <FontAwesome name="image" size={18} color="#6366f1" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  value={image}
+                  onChangeText={setImage}
+                  placeholder="Ej: https://example.com/image.jpg"
+                  placeholderTextColor="#94a3b8"
+                  accessibilityLabel="URL de la imagen del curso"
+                />
+              </View>
+              {errors.image ? (
+                <View style={styles.errorContainer}>
+                  <FontAwesome name="exclamation-circle" size={14} color="#ef4444" />
+                  <Text style={styles.errorText}>{errors.image}</Text>
+                </View>
+              ) : null}
+            </View>
+
+            <Pressable
+              onPress={handleSubmit}
+              style={({ pressed }) => [
+                styles.button,
+                pressed ? styles.buttonPressed : null,
+                isSubmitting ? styles.buttonDisabled : null,
+              ]}
+              disabled={isSubmitting}
+              accessibilityRole="button"
+              accessibilityLabel="Crear curso"
+            >
+              {isSubmitting ? (
+                <View style={styles.buttonContent}>
+                  <ActivityIndicator size="small" color="#fff" />
+                  <Text style={styles.buttonText}>Creando...</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonContent}>
+                  <FontAwesome name="plus-circle" size={18} color="white" />
+                  <Text style={styles.buttonText}>Crear Curso</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
         </View>
-
-     <View style ={styles.finalSeccion}>
-        <Text style = {styles.title2}> Comienza a añadir modulos</Text>
-        <Link href={"/administrador/CrearModulo"}>
-        <Pressable style={styles.button}>
-           <Text style ={styles.textButton2}>Agregar modulo</Text>
-         </Pressable>
-         </Link>
-         </View>
-
-
-        </ScrollView>
-        </SafeAreaView>
-    );
-
-}; 
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
-
-    container: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 20,
-        marginTop:60,
-        flex:1,  
-    },
-
-    seccionado:{
-        backgroundColor: '#f0f8ff',
-        borderRadius: 20,
-        flex:1,
-        alignItems: 'center',
-        width:'90%',
-        padding:20,
-        marginTop:10,
-        marginBottom:20,
-        // iOS shadow
-       shadowColor: '#000',
-       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 5,
-
-      // Android shadow
-      elevation: 6,
-        },
-
-    button:{
-     backgroundColor: '#4169e1',
-     padding: 20,
-     borderRadius: 60,
-     marginTop:20,
-     borderColor: '#483d8b',
-     alignItems:'center',
-     maxWidth:'100%'
-
-    },
-
-    
-
-    title: {
-        fontSize: 40,
-        fontWeight: '800',
-        color: '#4169e1',
-        marginBottom: 10,
-      },
-
-    title2: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: '#4169e1',
-        marginBottom: 10,
-        marginTop:30
-      },
-
-
-    foro:{
-        backgroundColor: '#b0c4de',
-        padding: 20,
-        borderRadius: 20,
-        marginTop:20,
-        flex:1,
-        alignItems:'center'
-    },
-
-    text:{
-        fontSize: 20,
-        fontWeight: '600',
-        color: '#696969',
-        marginBottom: 20,
-
-    
-    },
-
-    textButton:{
-        fontSize: 20,
-        fontWeight: '700',
-        color: 'white',
-    
-    },
-
-    textButton2:{
-        fontSize: 20,
-        fontWeight: '600',
-        color: 'white',
-    
-    },
-
-    input: {
-        borderColor: '#483d8b',
-        borderWidth: 1,
-        borderRadius: 30,
-        padding: 15,
-        fontSize: 16,
-        backgroundColor: '#f9f9f9',
-        width: '90%'
-      },
-
-      finalSeccion:{
-        alignItems:'center'
-      }
-})
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  },
+  container: {
+    padding: 20,
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    width: '100%',
+    maxWidth: 500,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 5,
+  },
+  header: {
+    paddingTop: 40,
+    paddingBottom: 24,
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  headerIcon: {
+    marginBottom: 16,
+  },
+    backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: '#eee',
+    borderRadius: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#4169e1',
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#64748b',
+    textAlign: 'center',
+    maxWidth: '80%',
+  },
+  formContainer: {
+    padding: 24,
+    paddingTop: 16,
+    backgroundColor: 'white',
+  },
+  inputGroup: {
+    width: '100%',
+    marginBottom: 24,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#64748b',
+    marginBottom: 8,
+    letterSpacing: 0.3,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    backgroundColor: '#f8fafc',
+  },
+  inputWrapperActive: {
+    borderColor: '#6366f1',
+    backgroundColor: '#fff',
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  inputWrapperError: {
+    borderColor: '#ef4444',
+    backgroundColor: '#fef2f2',
+  },
+  inputIcon: {
+    paddingHorizontal: 16,
+  },
+  input: {
+    flex: 1,
+    padding: 16,
+    fontSize: 16,
+    color: '#334155',
+    fontWeight: '500',
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    marginLeft: 4,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#ef4444',
+    marginLeft: 6,
+    fontWeight: '500',
+  },
+  button: {
+    backgroundColor: '#6366f1',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 8,
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPressed: {
+    backgroundColor: '#4f46e5',
+    transform: [{ scale: 0.98 }],
+  },
+  buttonDisabled: {
+    backgroundColor: '#a5b4fc',
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'white',
+    marginLeft: 10,
+  },
+});
