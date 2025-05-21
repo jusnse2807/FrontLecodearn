@@ -14,15 +14,32 @@ import { router } from 'expo-router';
 const { width, height } = Dimensions.get('window');
 
 export default function RegisterScreen() {
-    const [nombre, setNombre] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [fecha_nacimiento, setFechaNacimiento] = useState('');
-    const [pais, setPais] = useState('');
-    const [nivel_educacion, setNivelEducacion] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fecha_nacimiento, setFechaNacimiento] = useState('');
+  const [pais, setPais] = useState('');
+  const [nivel_educacion, setNivelEducacion] = useState('');
+
+  const validarFecha = (fecha: string) => /^\d{4}-\d{2}-\d{2}$/.test(fecha);
+  const validarEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleRegister = async () => {
-    console.log('Registrando usuario...');
+    if (!email || !password || !nombre || !fecha_nacimiento || !pais || !nivel_educacion) {
+      alert('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (!validarEmail(email)) {
+      alert('Por favor ingresa un correo electrónico válido.');
+      return;
+    }
+
+    if (!validarFecha(fecha_nacimiento)) {
+      alert('Formato de fecha inválido. Usa YYYY-MM-DD.');
+      return;
+    }
+
     try {
       const response = await fetch('https://lecodearnback.onrender.com/usuario', {
         method: 'POST',
@@ -30,31 +47,34 @@ export default function RegisterScreen() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            email,
-            password,
-            nombre,
-            fecha_nacimiento,
-            pais,
-            nivel_educacion,
-            vidas: 3,
-            premium: false,
+          email,
+          password,
+          nombre,
+          fecha_nacimiento,
+          pais,
+          nivel_educacion,
+          vidas: 3,
+          premium: false,
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error al registrar:', errorData);
-        Alert.alert('Registro fallido', 'Verifica los datos ingresados.');
+        if (data.message?.toLowerCase().includes('ya existe')) {
+          alert('Ya existe una cuenta con este correo.');
+        } else {
+          alert(data.message || 'Error al registrar. Verifica los datos.');
+        }
         return;
       }
 
-      const data = await response.json();
-      console.log('Usuario registrado:', data);
-      Alert.alert('Registro exitoso', '¡Tu cuenta fue creada correctamente!');
+      // Redirige sin mostrar mensaje
       router.push('/login');
+
     } catch (error) {
       console.error('Error de red:', error);
-      Alert.alert('Error de red', 'No se pudo conectar al servidor.');
+      alert('No se pudo conectar al servidor.');
     }
   };
 

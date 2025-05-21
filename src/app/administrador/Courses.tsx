@@ -1,52 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, Text, View, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
-// Interfaz del curso según el backend
-interface Curso {
-  id: string;
-  nombre: string;
-  image: string;
-  modulos: any[];
-}
+const iconMap: {[key: string]: ReactNode} = {
+  python: <FontAwesome5 name="python" size={24} color="#6C63FF" />,
+  java: <MaterialCommunityIcons name="language-java" size={24} color="#6C63FF" />,
+  html: <MaterialCommunityIcons name="language-html5" size={24} color="#6C63FF" />,
+  javascript: <MaterialCommunityIcons name="language-javascript" size={24} color="#6C63FF" />,
+  csharp: <MaterialCommunityIcons name="language-csharp" size={24} color="#6C63FF" />,
+};
 
 export default function CoursesScreen() {
-  const [courses, setCourses] = useState<Curso[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch('https://lecodearnback.onrender.com/curso');
-        const data = await response.json();
+    fetch('https://lecodearnback.onrender.com/curso')
+      .then(res => res.json())
+      .then(data => {
         setCourses(data);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
-    };
-
-    fetchCourses();
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error loading courses:', err);
+        setLoading(false);
+      });
   }, []);
 
-  const getIconForCourse = (name: string) => {
-    switch (name.toLowerCase()) {
-      case 'python':
-        return <FontAwesome5 name="python" size={24} color="#6C63FF" />;
-      case 'java':
-        return <MaterialCommunityIcons name="language-java" size={24} color="#6C63FF" />;
-      case 'html':
-        return <MaterialCommunityIcons name="language-html5" size={24} color="#6C63FF" />;
-      case 'javascript':
-        return <MaterialCommunityIcons name="language-javascript" size={24} color="#6C63FF" />;
-      case 'c#':
-        return <MaterialCommunityIcons name="language-csharp" size={24} color="#6C63FF" />;
-      default:
-        return <MaterialCommunityIcons name="book" size={24} color="#6C63FF" />;
-    }
+  const getIcon = (name: string) => {
+    const key = name.toLowerCase().replace('#', 'sharp');
+    return iconMap[key] || <MaterialCommunityIcons name="book-outline" size={24} color="#6C63FF" />;
   };
+
+  if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
   return (
     <View style={styles.container}>
@@ -54,7 +44,6 @@ export default function CoursesScreen() {
         <Text style={styles.backButtonText}>← Volver</Text>
       </Pressable>
 
-      {/* Fondo SVG */}
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
         <Path
           d={`M 0 0 C ${width * 0.00000000001} ${height * 0.9}, ${width * 0.0000001} ${height * 0.1}, ${width} ${height * 0.2} L ${width} 0 Z`}
@@ -72,12 +61,13 @@ export default function CoursesScreen() {
           data={courses}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.courseItem}>
-              <View style={styles.iconContainer}>{getIconForCourse(item.nombre)}</View>
-              <Text style={styles.courseText}>
-                {item.nombre} ({item.modulos.length} módulos)
-              </Text>
-            </View>
+            <Pressable
+              onPress={() => router.push({ pathname: '/modules', params: { cursoId: item.id, cursoNombre: item.nombre } })}
+              style={styles.courseItem}
+            >
+              <View style={styles.iconContainer}>{getIcon(item.nombre)}</View>
+              <Text style={styles.courseText}>{item.nombre}</Text>
+            </Pressable>
           )}
           contentContainerStyle={styles.courseList}
         />
@@ -87,41 +77,12 @@ export default function CoursesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ede7f3',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-    marginBottom: 10,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    backgroundColor: '#eee',
-    borderRadius: 10,
-    marginTop: 50,
-    marginLeft: 10,
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: '#4169e1',
-    fontWeight: '600',
-  },
-  content: {
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
-    textAlign: 'center',
-  },
-  courseList: {
-    alignItems: 'center',
-    paddingBottom: 40,
-  },
+  container: { flex: 1, backgroundColor: '#ede7f3', alignItems: 'center', justifyContent: 'center' },
+  backButton: { alignSelf: 'flex-start', marginBottom: 10, paddingVertical: 6, paddingHorizontal: 12, backgroundColor: '#eee', borderRadius: 10 },
+  backButtonText: { fontSize: 16, color: '#4169e1', fontWeight: '600' },
+  content: { alignItems: 'center' },
+  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 20, color: '#333', textAlign: 'center' },
+  courseList: { alignItems: 'center', paddingBottom: 40 },
   courseItem: {
     backgroundColor: '#cfc9ef',
     borderRadius: 12,
@@ -135,12 +96,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  iconContainer: {
-    marginRight: 12,
-  },
-  courseText: {
-    color: '#333',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  iconContainer: { marginRight: 12 },
+  courseText: { color: '#333', fontSize: 18, fontWeight: 'bold' },
 });
