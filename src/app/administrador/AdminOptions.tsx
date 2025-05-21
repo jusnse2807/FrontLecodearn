@@ -2,6 +2,8 @@ import { Pressable } from "react-native";
 import { FlatList, Text } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { Link } from "expo-router";
+import { useAuthGuard } from "@/src/hooks/useAuthGuard";
+
 type Opcion = {id: string; name: string, reference: string};
 const opciones: Opcion[] = [
     {id: '1', name: 'Crear secciones', reference: 'CrearSeccion'},
@@ -14,6 +16,8 @@ const opciones: Opcion[] = [
 ];
 
 export default function AdminOptions(){
+
+  useAuthGuard();
 
     const renderItem = ({item}: {item: Opcion}) =>(
     

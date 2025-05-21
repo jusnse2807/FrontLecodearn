@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthGuard } from '../hooks/useAuthGuard';
 import {
   View, Text, StyleSheet, Dimensions,
   TouchableOpacity, ActivityIndicator, Image
@@ -22,6 +23,9 @@ const PuzzlePiece = ({ number }: { number: number }) => (
 );
 
 export default function ModuloScreen() {
+
+  useAuthGuard();
+
   const { cursoId } = useLocalSearchParams<{ cursoId: string }>();
   const [modulos, setModulos] = useState<{ id: string; numero: string; titulo: string }[]>([]);
   const [loading, setLoading] = useState(true);

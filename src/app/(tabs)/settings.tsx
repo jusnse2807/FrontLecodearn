@@ -3,8 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 
 export default function SettingsScreen() {
+
+  useAuthGuard()
+
   const insets = useSafeAreaInsets();
   const API_URL = 'https://lecodearnback.onrender.com/usuario';
   return (

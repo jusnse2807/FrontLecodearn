@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthGuard } from '../hooks/useAuthGuard';
 import {
   View,
   Text,
@@ -30,6 +31,9 @@ type SeccionDetail = {
 };
 
 export default function SeccionDetalle() {
+
+  useAuthGuard();
+
   const { seccionId } = useLocalSearchParams<{ seccionId: string }>();
   const [seccion, setSeccion] = useState<SeccionDetail | null>(null);
   const [loading, setLoading] = useState(true);

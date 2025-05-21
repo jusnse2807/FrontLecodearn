@@ -1,6 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 
 export default function HomeScreen() {
+
+  useAuthGuard();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Lecodearn!</Text>

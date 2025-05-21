@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 import {
   View,
   Text,
@@ -21,6 +22,9 @@ interface User {
 const API_URL = 'https://lecodearnback.onrender.com/usuario';
 
 const UserManager: React.FC = () => {
+
+  useAuthGuard();
+
   const router = useRouter();  
   const [users, setUsers] = useState<User[]>([]);
   const [editingUser, setEditingUser] = useState<User | null>(null);

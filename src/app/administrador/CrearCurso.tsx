@@ -2,8 +2,12 @@ import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, SafeAreaView,
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useAuthGuard } from "@/src/hooks/useAuthGuard";
 
 export default function CrearCurso() {
+
+  useAuthGuard();
+
   const [nombre, setNombre] = useState('');
   const [image, setImage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

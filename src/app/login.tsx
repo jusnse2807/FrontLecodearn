@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,7 +17,8 @@ export default function LoginScreen() {
     }
 
     try {
-      const response = await fetch('https://lecodearnback.onrender.com/administradores/login', {
+      
+      const response = await fetch('https://lecodearnback.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,6 +26,7 @@ export default function LoginScreen() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('response', response)
       if (!response.ok) {
         const error = await response.json();
         alert(error.message || 'Error al iniciar sesión');
@@ -32,7 +35,22 @@ export default function LoginScreen() {
 
       const data = await response.json();
       console.log('Login exitoso:', data);
-      router.push('/administrador/AdminOptions');
+      await AsyncStorage.setItem('token', data.token)
+      await AsyncStorage.setItem('role', data.role)
+
+    switch (data.role){
+
+      case 'ADMIN':
+       router.push('/administrador/AdminOptions');
+       break;
+      case 'USER':
+       router.push('/(tabs)');
+       break;
+      default:
+       alert('Rol de usuario desconocido');
+       break;
+      }
+      
     } catch (error) {
       console.error('Error de red:', error);
       alert('No se pudo conectar al servidor');

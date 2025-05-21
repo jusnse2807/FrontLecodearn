@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 import {
   Dimensions,
   StyleSheet,
@@ -15,6 +16,9 @@ import { router } from 'expo-router';
 const { width, height } = Dimensions.get('window');
 
 export default function CoursesScreen() {
+
+  useAuthGuard()
+
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

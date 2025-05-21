@@ -4,8 +4,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Picker } from '@react-native-picker/picker';
 import { Seccion } from "@/src/types";
 import { router } from "expo-router";
+import { useAuthGuard } from "@/src/hooks/useAuthGuard";
 
 export default function CrearModulo() {
+
+  useAuthGuard();
+
   const [numero, setNumero] = useState('');
   const [titulo, setTitulo] = useState('');
   const [teoria, setTeoria] = useState('');

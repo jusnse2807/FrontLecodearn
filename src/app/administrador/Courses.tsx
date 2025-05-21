@@ -3,10 +3,12 @@ import { Dimensions, StyleSheet, Text, View, FlatList, Pressable, ActivityIndica
 import Svg, { Path } from 'react-native-svg';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 
 const { width, height } = Dimensions.get('window');
 
 const iconMap: {[key: string]: ReactNode} = {
+
   python: <FontAwesome5 name="python" size={24} color="#6C63FF" />,
   java: <MaterialCommunityIcons name="language-java" size={24} color="#6C63FF" />,
   html: <MaterialCommunityIcons name="language-html5" size={24} color="#6C63FF" />,
@@ -15,6 +17,9 @@ const iconMap: {[key: string]: ReactNode} = {
 };
 
 export default function CoursesScreen() {
+
+  useAuthGuard();
+
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

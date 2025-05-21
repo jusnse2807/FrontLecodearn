@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 import {
   View,
   Text,
@@ -19,6 +20,9 @@ interface UserInfo {
 }
 
 const PersonalInfoScreen: React.FC = () => {
+
+  useAuthGuard();
+
   const insets = useSafeAreaInsets();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({

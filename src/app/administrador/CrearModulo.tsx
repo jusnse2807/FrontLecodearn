@@ -5,8 +5,12 @@ import { Picker } from '@react-native-picker/picker';
 import { Modulo } from "@/src/types";
 import { FlatList } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useAuthGuard } from "@/src/hooks/useAuthGuard";
 
 export default function CrearModulo() {
+
+  useAuthGuard();
+
   const [titulo, setTitulo] = useState('');
   const [numero, setNumero] = useState('');
   const [cursoId, setCursoId] = useState('');

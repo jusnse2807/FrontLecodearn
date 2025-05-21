@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthGuard } from '../hooks/useAuthGuard';
 import {
   Dimensions,
   StyleSheet,
@@ -20,6 +21,9 @@ type Seccion = {
 };
 
 export default function Secciones() {
+
+  useAuthGuard();
+
   // Recibimos moduloId y moduloNumero desde params
   const { moduloId, moduloNumero } = useLocalSearchParams<{
     moduloId: string;
