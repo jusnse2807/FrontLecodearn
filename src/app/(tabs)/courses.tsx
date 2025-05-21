@@ -17,7 +17,7 @@ const { width, height } = Dimensions.get('window');
 
 export default function CoursesScreen() {
 
-  useAuthGuard()
+const {checking } = useAuthGuard();
 
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +37,7 @@ export default function CoursesScreen() {
 
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
+  if(!checking){
   return (
     <View style={styles.container}>
       <Pressable onPress={() => router.back()} style={styles.backButton}>
@@ -83,7 +84,7 @@ export default function CoursesScreen() {
         />
       </View>
     </View>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

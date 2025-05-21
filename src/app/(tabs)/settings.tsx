@@ -7,10 +7,12 @@ import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 
 export default function SettingsScreen() {
 
-  useAuthGuard()
+ const { checking } = useAuthGuard();
 
   const insets = useSafeAreaInsets();
   const API_URL = 'https://lecodearnback.onrender.com/usuario';
+  
+  if(!checking){
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
 
@@ -56,7 +58,7 @@ export default function SettingsScreen() {
         <Text style={styles.iconStreak}>🔥</Text>
       </View>
     </View>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

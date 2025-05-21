@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
+import { useAuthGuard } from '../hooks/useAuthGuard';
 
 export default function Index() {
   const [showSplash, setShowSplash] = useState(true);
-
+  const { checking } = useAuthGuard();
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-
-      const isAuthenticated = true ; // Cambia a true si quieres ir directo a tabs
-      if (isAuthenticated) {
+      //const isAuthenticated = true ; // Cambia a true si quieres ir directo a tabs
+      if (!checking) {
         router.replace('/(tabs)');
       } else {
         router.replace('/login');

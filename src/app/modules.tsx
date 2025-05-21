@@ -24,7 +24,7 @@ const PuzzlePiece = ({ number }: { number: number }) => (
 
 export default function ModuloScreen() {
 
-  useAuthGuard();
+  const { checking } = useAuthGuard();
 
   const { cursoId } = useLocalSearchParams<{ cursoId: string }>();
   const [modulos, setModulos] = useState<{ id: string; numero: string; titulo: string }[]>([]);
@@ -38,6 +38,9 @@ export default function ModuloScreen() {
       .finally(() => setLoading(false));
   }, [cursoId]);
 
+  if (!checking){
+
+  
   return (
     <View style={styles.container}>
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
@@ -73,7 +76,7 @@ export default function ModuloScreen() {
         </View>
       )}
     </View>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

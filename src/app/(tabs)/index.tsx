@@ -2,10 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuthGuard } from '@/src/hooks/useAuthGuard';
 
 const { width, height } = Dimensions.get('window');
 
 export default function CoursesScreen() {
+
+  const { checking } = useAuthGuard();
+
   const inProgressCourses = [
     { name: 'Python', icon: <Ionicons name="logo-python" size={24} color="black" />, module: 2, progress: 0.66 },
     { name: 'Java', icon: <MaterialCommunityIcons name="language-java" size={24} color="black" />,module: 1, stars: 3, progress: 0.5  },
@@ -17,6 +21,7 @@ export default function CoursesScreen() {
     { name: 'Logic 1', icon: <MaterialCommunityIcons name="lightbulb-outline" size={24} color="black" />, stars: 4 },
   ];
 
+  if(!checking){
   return (
     <View style={styles.container}>
       <Svg height="100%" width="100%" style={StyleSheet.absoluteFill}>
@@ -62,7 +67,7 @@ export default function CoursesScreen() {
 
       </ScrollView>
     </View>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({
